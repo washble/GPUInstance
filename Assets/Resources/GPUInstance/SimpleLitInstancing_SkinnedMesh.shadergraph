@@ -13,11 +13,7 @@
             "m_Id": "2c956efad0024997915196037394bcc8"
         }
     ],
-    "m_Keywords": [
-        {
-            "m_Id": "c2229d99682045e4afcf6991148e1842"
-        }
-    ],
+    "m_Keywords": [],
     "m_Dropdowns": [],
     "m_CategoryData": [
         {
@@ -519,6 +515,9 @@
     "m_Guid": {
         "m_GuidSerialized": "47e6677c-a7e8-4dba-9fae-977a601c9340"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "Smoothness",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "Smoothness",
@@ -532,12 +531,25 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": 0.0,
     "m_FloatType": 0,
+    "m_LiteralFloatMode": false,
     "m_RangeValues": {
         "x": 0.0,
         "y": 1.0
-    }
+    },
+    "m_SliderType": 0,
+    "m_SliderPower": 3.0,
+    "m_EnumType": 0,
+    "m_CSharpEnumString": "",
+    "m_EnumNames": [
+        "Default"
+    ],
+    "m_EnumValues": [
+        0
+    ]
 }
 
 {
@@ -596,6 +608,7 @@
     "m_SourceType": 0,
     "m_FunctionName": "surf",
     "m_FunctionSource": "9b03d724c8b07444a9563e598b2c3304",
+    "m_FunctionSourceUsePragmas": true,
     "m_FunctionBody": "Enter function body here..."
 }
 
@@ -647,7 +660,8 @@
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
-    "m_Labels": []
+    "m_Labels": [],
+    "m_LiteralMode": false
 }
 
 {
@@ -685,7 +699,8 @@
     "m_StageCapability": 2,
     "m_Value": 1.0,
     "m_DefaultValue": 1.0,
-    "m_Labels": []
+    "m_Labels": [],
+    "m_LiteralMode": false
 }
 
 {
@@ -748,6 +763,7 @@
     "m_SourceType": 1,
     "m_FunctionName": "Setup",
     "m_FunctionSource": "",
+    "m_FunctionSourceUsePragmas": true,
     "m_FunctionBody": "#pragma exclude_renderers gles\r\n#pragma instancing_options procedural:setup\r\n#pragma target 5.0\n\n#pragma shader_feature Blend1 Blend2 Blend3 Blend4\n\nOut = In;"
 }
 
@@ -966,7 +982,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -1029,6 +1045,9 @@
     "m_Guid": {
         "m_GuidSerialized": "0f778a42-62c9-40de-920b-440e94db187d"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "Color",
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "Color",
@@ -1042,6 +1061,8 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
         "r": 1.0,
         "g": 1.0,
@@ -1159,7 +1180,8 @@
     "m_StageCapability": 2,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
-    "m_Labels": []
+    "m_Labels": [],
+    "m_LiteralMode": false
 }
 
 {
@@ -1199,6 +1221,7 @@
     "m_SourceType": 0,
     "m_FunctionName": "gpuinstance_includes",
     "m_FunctionSource": "9b03d724c8b07444a9563e598b2c3304",
+    "m_FunctionSourceUsePragmas": true,
     "m_FunctionBody": "Enter function body here..."
 }
 
@@ -1220,7 +1243,7 @@
     "m_DefaultValue": {
         "x": 0.0,
         "y": 0.0,
-        "z": 0.0
+        "z": 1.0
     },
     "m_Labels": []
 }
@@ -1321,6 +1344,7 @@
     "m_SourceType": 0,
     "m_FunctionName": "vert",
     "m_FunctionSource": "9b03d724c8b07444a9563e598b2c3304",
+    "m_FunctionSourceUsePragmas": true,
     "m_FunctionBody": "int id = get_instance_id();\r\nanim_vertex(id, texcoord_in, vertex_in, normal_in);\r\nvertex = vertex_in;\r\nnormal = normal_in;"
 }
 
@@ -1500,6 +1524,10 @@
     "m_AlphaClip": false,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
+    "m_DisableTint": false,
+    "m_Sort3DAs2DCompatible": false,
+    "m_AdditionalMotionVectorMode": 0,
+    "m_AlembicMotionVectors": false,
     "m_SupportsLODCrossFade": true,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
@@ -1572,6 +1600,9 @@
     "m_Guid": {
         "m_GuidSerialized": "15786437-0ba0-497c-88ce-2b55e67e2bc1"
     },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
     "m_Name": "Albedo",
     "m_DefaultRefNameVersion": 0,
     "m_RefNameGeneratedByDisplayName": "",
@@ -1585,39 +1616,18 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"bd6a584664d99904ca913b8235e0735d\",\"type\":3}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
     "useTilingAndOffset": false,
+    "useTexelSize": true,
+    "isHDR": false,
     "m_Modifiable": true,
     "m_DefaultType": 0
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
-    "m_ObjectId": "c2229d99682045e4afcf6991148e1842",
-    "m_Guid": {
-        "m_GuidSerialized": "57be5f99-84ea-4f97-8d96-4de02d98e34a"
-    },
-    "m_Name": "_PROCEDURAL_INSTANCING_ON",
-    "m_DefaultRefNameVersion": 0,
-    "m_RefNameGeneratedByDisplayName": "",
-    "m_DefaultReferenceName": "BOOLEAN_C2229D99682045E4AFCF6991148E1842_ON",
-    "m_OverrideReferenceName": "PROCEDURAL_INSTANCING_ON",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_KeywordType": 0,
-    "m_KeywordDefinition": 1,
-    "m_KeywordScope": 1,
-    "m_KeywordStages": 63,
-    "m_Entries": [],
-    "m_Value": 1,
-    "m_IsEditable": true
 }
 
 {
@@ -1777,9 +1787,6 @@
             "m_Id": "bbe719433beb4dd491f33f9a3cffe503"
         },
         {
-            "m_Id": "c2229d99682045e4afcf6991148e1842"
-        },
-        {
             "m_Id": "684b680224534a958190cfc4c0210829"
         },
         {
@@ -1823,7 +1830,8 @@
     "m_StageCapability": 2,
     "m_Value": 0.5,
     "m_DefaultValue": 0.5,
-    "m_Labels": []
+    "m_Labels": [],
+    "m_LiteralMode": false
 }
 
 {
@@ -1878,7 +1886,7 @@
     "m_DefaultValue": {
         "x": 0.0,
         "y": 0.0,
-        "z": 0.0
+        "z": 1.0
     },
     "m_Labels": []
 }
