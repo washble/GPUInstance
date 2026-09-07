@@ -61,7 +61,9 @@ Shader "Instanced/instancemeshdefault_SkinnedMesh"
     {
       UNITY_INITIALIZE_OUTPUT(Input, o);
       int id = get_instance_id();
-      anim_vertex(id, v.texcoord1, v.vertex, v.normal);
+      float3 tangent = v.tangent.xyz;
+      anim_vertex(id, v.texcoord1, v.vertex, v.normal, tangent);
+      v.tangent.xyz = tangent;
     }
 
     void surf(Input IN, inout SurfaceOutputStandard o)

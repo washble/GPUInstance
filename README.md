@@ -163,3 +163,17 @@ private Path GetNewPath()
 * If you want to modify the compute shader and add your own stuff- you can overwrite some of the fields in the property struct safely.
   * You can overwrite the offset/tiling if you dont need them. You can overwrite the color if you dont need it. You can overwrite the pathInstanceTicks if not using a path. You can overwrite the instanceTicks if not using an animation. The pad2 field is completely unused- you can use it for whatever without any worries.
 * What version of Unity is supported? Unity 2023.2 is what this project was most recently built with- but it should work for most versions. See *branches* for versions with explicit support.
+
+## Updates
+
+### Shader Graph
+
+* Upgraded the GPU instancing shader to a Shader Graph-based URP Lit workflow to improve compatibility with the standard URP Lit rendering pipeline.
+* Fixed rendering differences caused by incorrect Normal Map space handling.
+* Changed Normal Map processing to **Tangent Space** for correct normal mapping.
+
+### Async Compute Synchronization
+
+* Added Graphics Fence synchronization to safely coordinate Async Compute updates with indirect rendering.
+* Fixed Build-only shadow flickering caused by GPU buffer synchronization issues between Compute and Graphics execution.
+

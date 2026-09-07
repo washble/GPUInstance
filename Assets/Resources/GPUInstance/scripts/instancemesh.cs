@@ -113,6 +113,7 @@ namespace GPUInstance
         private ComputeBuffer pathsBuffer = null;
         private ComputeBuffer pathsDeltaBuffer = null;
         private ComputeBuffer pathsDeltaIDBuffer = null;
+        private UnityEngine.Rendering.GraphicsFence asyncComputeFence;
 
         // resize buffers- used as temp storage so buffers can have their size increased
         private ComputeBuffer hierarchyDepthResizeBuffer = null;
@@ -1606,6 +1607,9 @@ namespace GPUInstance
 
         void execute_command_buffer()
         {
+            // This is recorded after every compute/update command, so it signals only when
+            // all buffers consumed by the following indirect draw are ready.
+            this.asyncComputeFence = this.cmd.CreateAsyncGraphicsFence();
             Graphics.ExecuteCommandBufferAsync(this.cmd, UnityEngine.Rendering.ComputeQueueType.Urgent);
             this.cmd.Clear();
             this.cmd.SetExecutionFlags(UnityEngine.Rendering.CommandBufferExecutionFlags.AsyncCompute);
@@ -1658,6 +1662,9 @@ namespace GPUInstance
             UnityEngine.Profiling.Profiler.EndSample();
             UnityEngine.Profiling.Profiler.BeginSample("DrawIndirect_InstanceMesh");
 #endif
+
+            // GPU-side wait only; this does not block the CPU.
+            UnityEngine.Graphics.WaitOnAsyncGraphicsFence(this.asyncComputeFence);
 
             //draw indirect
             DrawIndirect();

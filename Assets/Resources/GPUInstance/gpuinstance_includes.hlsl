@@ -85,7 +85,7 @@ void do_instance_setup()
   unity_WorldToObject = object2WorldBuffer[w2o_index(instanceIDBuffer[id])];
 }
 
-void anim_vertex(in int id, in float4 texcoord1, inout float4 vertex, inout float3 normal)
+void anim_vertex(in int id, in float4 texcoord1, inout float4 vertex, inout float3 normal, inout float3 tangent)
 {
 #if Blend1
   int2 bIdx = Unpack2(texcoord1.x);
@@ -123,8 +123,10 @@ void anim_vertex(in int id, in float4 texcoord1, inout float4 vertex, inout floa
 
   float3 vertex_world = mul(bone_vert2world, float4(vertex.xyz, 1)).xyz; // transform vertex to world
   float3 vertex_normal_world = mul((float3x3)bone_vert2world, normal);
+  float3 vertex_tangent_world = mul((float3x3)bone_vert2world, tangent);
   vertex = mul(unity_WorldToObject, float4(vertex_world, 1)); // transform back to model space.    TODO: ? try reduce to one gpu matrix mult (although, these are all 4x4*4x1)- okay, so with profiling it seems to be slower- no idea why
   normal = normalize(mul((float3x3)unity_WorldToObject, vertex_normal_world));
+  tangent = normalize(mul((float3x3)unity_WorldToObject, vertex_tangent_world));
 }
 
 void setup() {
@@ -133,11 +135,12 @@ void setup() {
 
 void gpuinstance_includes_float(float3 Position, out float3 Out) { Out = Position; }
 
-void vert_float(in float4 vertex_in, in float3 normal_in : NORMAL, in float4 texcoord_in, out float4 vertex : POSITION, out float3 normal : NORMAL, out float2 uv_MainTex) {
+void vert_float(in float4 vertex_in, in float3 normal_in : NORMAL, in float3 tangent_in : TANGENT, in float4 texcoord_in, out float4 vertex : POSITION, out float3 normal : NORMAL, out float3 tangent : TANGENT, out float2 uv_MainTex) {
   int id = get_instance_id();
   vertex = vertex_in;
   normal = normal_in;
-  anim_vertex(id, texcoord_in, vertex, normal);
+  tangent = tangent_in;
+  anim_vertex(id, texcoord_in, vertex, normal, tangent);
   uv_MainTex = texcoord_in.xy;
 }
 
