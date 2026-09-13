@@ -113,6 +113,7 @@ namespace GPUInstance
         private ComputeBuffer pathsBuffer = null;
         private ComputeBuffer pathsDeltaBuffer = null;
         private ComputeBuffer pathsDeltaIDBuffer = null;
+        private ComputeBuffer proceduralBoneAimFallbackBuffer = null;
         private UnityEngine.Rendering.GraphicsFence asyncComputeFence;
 
         // resize buffers- used as temp storage so buffers can have their size increased
@@ -551,6 +552,14 @@ namespace GPUInstance
             this.instancemeshShader.SetBuffer(this.PropertySimulationKernel, "propertyBuffer", this.propertyBuffer);
             this.instancemeshShader.SetBuffer(this.motionKernalID, "propertyBuffer", this.propertyBuffer);
 
+            // Keep the generic instancer valid even before an owner supplies a
+            // procedural buffer. GPUInstanceManager replaces this binding.
+            this.proceduralBoneAimFallbackBuffer = new ComputeBuffer(1, sizeof(float) * 8);
+            this.instancemeshShader.SetBuffer(
+                this.motionKernalID,
+                "proceduralBoneAimBuffer",
+                this.proceduralBoneAimFallbackBuffer);
+
             // properties delta buffer
             this._property_delta_buffer = new InstanceMeshDeltaBuffer<instance_properties_delta>(InitialPropertyBufferSize, PropertyBufferMaxDeltaCount, instancemesh.maxMeshTypes, TrackGroupCounts: false);
             this.propertyDeltaBuffer = new ComputeBuffer(PropertyBufferMaxDeltaCount, instance_properties_delta.kByteStride);
@@ -601,6 +610,24 @@ namespace GPUInstance
 
             //add default
             this.Default = AddInstancedMesh(mesh, material, mode: UnityEngine.Rendering.ShadowCastingMode.Off, receive_shadows: false);
+        }
+
+        /// <summary>
+        /// Binds an optional externally owned buffer containing one post-animation
+        /// local rotation per gameplay slot. The caller retains buffer lifetime.
+        /// </summary>
+        public void SetProceduralBoneAimBuffer(ComputeBuffer buffer)
+        {
+            AssertInitializedAndMainThread();
+            if (buffer == null)
+                throw new System.ArgumentNullException(nameof(buffer));
+
+            // The caller retains ownership; this class only replaces the compute
+            // binding and keeps its own fallback for standalone use.
+            instancemeshShader.SetBuffer(
+                motionKernalID,
+                "proceduralBoneAimBuffer",
+                buffer);
         }
 
         /// <summary>
@@ -879,10 +906,13 @@ namespace GPUInstance
                 this.pathsDeltaBuffer.Release();
             if (this.pathsDeltaIDBuffer != null)
                 this.pathsDeltaIDBuffer.Release();
+            if (this.proceduralBoneAimFallbackBuffer != null)
+                this.proceduralBoneAimFallbackBuffer.Release();
 
             //reset everything
             this.Initialized = false;
             this.Default = null;
+            this.proceduralBoneAimFallbackBuffer = null;
 
             if (this._delta_buffer != null)
                 this._delta_buffer.Dispose();
@@ -1557,6 +1587,7 @@ namespace GPUInstance
                 this.cmd.BeginSample("MotionKernel");
                 this.cmd.DispatchCompute(this.instancemeshShader, this.motionKernalID, instance_count / kThreadGroupX, 1, 1);
                 this.cmd.EndSample("MotionKernel");
+
             }
 
             // Run Object2World matrix calculations

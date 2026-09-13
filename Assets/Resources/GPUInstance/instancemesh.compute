@@ -73,6 +73,17 @@ int PROPERTY_COUNT; // Total number of properties
 int PATH_DELTA_COUNT; // number of paths being updated in delta update
 int PATH_COUNT; // number of points per path
 
+struct procedural_bone_aim_data
+{
+  float4 localRotation;
+  int boneIndex;
+  int enabled;
+  int padding0;
+  int padding1;
+};
+
+StructuredBuffer<procedural_bone_aim_data> proceduralBoneAimBuffer;
+
 float RADIUS_CULL_RATIO;
 float LOD_QUALITY;
 
@@ -845,6 +856,19 @@ void MotionUpdate(uint3 id : SV_DispatchThreadID)
       data.position = InterpPosition(t, boneAnimID); //interp
       data.rotation = InterpRotation(t, boneAnimID);
       data.scale = InterpScale(t, boneAnimID);
+
+      // Compose the optional gameplay-slot-owned local offset after the baked
+      // local pose has been sampled. This runs only when sampling replaces the
+      // prior pose, so the offset cannot accumulate across frames.
+      int aimDataIndex = props.pad2 - 1;
+      if (aimDataIndex >= 0)
+      {
+        procedural_bone_aim_data aim = proceduralBoneAimBuffer[aimDataIndex];
+        if (aim.enabled != 0 && bone_index == aim.boneIndex)
+        {
+          data.rotation = MulQuaternion(data.rotation, aim.localRotation);
+        }
+      }
     }
 
     //apply update

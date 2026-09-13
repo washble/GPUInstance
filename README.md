@@ -177,3 +177,12 @@ private Path GetNewPath()
 * Added Graphics Fence synchronization to safely coordinate Async Compute updates with indirect rendering.
 * Fixed Build-only shadow flickering caused by GPU buffer synchronization issues between Compute and Graphics execution.
 
+### Procedural Bone Rotation
+
+* `bonerotationdemo.unity` demonstrates **per-instance 3D bone rotation toward a target**.
+* Each GPU mech uses `GPUInstanceBinding` and `GPUProceduralBoneRotation`, with `Body` set as the target bone.
+* `bonerotationdemo.cs` calculates the target direction and applies the runtime bone rotation.
+* `TryGetSelectedBoneWorldTRS()` reads the current animated `Body` pose, and `SetRuntimeLocalRotation()` applies the procedural rotation.
+* The rotation is processed by the existing GPUInstance bone system after animation, so only the `Body` bone rotates while the root remains unchanged.
+* The demo uses the existing `GPUInstanceManager`, `GPUInstanceBinding`, `GPUProceduralBoneRotation`, and GPU bone rotation pipeline without modifying the core compute shader.
+

@@ -204,6 +204,21 @@ namespace GPUInstance
         }
 
         /// <summary>
+        /// Supplies an optional manager-owned buffer of post-animation bone
+        /// rotations. The instancer does not allocate or own this buffer.
+        /// </summary>
+        public void SetProceduralBoneAimBuffer(ComputeBuffer buffer)
+        {
+            lock (this._instance_lock)
+            {
+                if (!Initialized())
+                    throw new System.Exception("Error, mesh instancer must be initialized.");
+
+                this.mesh.SetProceduralBoneAimBuffer(buffer);
+            }
+        }
+
+        /// <summary>
         ///  Append an item to the update buffer.
         /// </summary>
         /// <typeparam name="T"></typeparam>

@@ -99,10 +99,35 @@ namespace GPUAnimation
         /// <returns></returns>
         public Matrix4x4 CalculateBone2World(in Matrix4x4 root2World, int bone, Animation a, ulong tickStart, in InstanceData<InstanceProperties> mesh)
         {
+            return CalculateBone2World(root2World, bone, a, tickStart, mesh, -1, Quaternion.identity);
+        }
+
+        /// <summary>
+        /// Reconstructs a bone pose using the same post-animation local rotation
+        /// composition as the GPU compute path.
+        /// </summary>
+        public Matrix4x4 CalculateBone2World(
+            in Matrix4x4 root2World,
+            int bone,
+            Animation a,
+            ulong tickStart,
+            in InstanceData<InstanceProperties> mesh,
+            int proceduralBoneIndex,
+            Quaternion proceduralLocalRotation)
+        {
             if (bone < 0 || bone >= this.Controller.BoneCount)
                 throw new System.Exception("Error, input an invalid bone index");
 
-            Matrix4x4 p2w = bone == AnimationController.kRootBoneID ? root2World : CalculateBone2World(root2World, this.Controller.bone_parents[bone], a, tickStart, mesh);
+            Matrix4x4 p2w = bone == AnimationController.kRootBoneID
+                ? root2World
+                : CalculateBone2World(
+                    root2World,
+                    this.Controller.bone_parents[bone],
+                    a,
+                    tickStart,
+                    mesh,
+                    proceduralBoneIndex,
+                    proceduralLocalRotation);
 
 
             var bAnim = a.boneAnimations[bone];
@@ -111,6 +136,11 @@ namespace GPUAnimation
             var pos = bAnim.InterpPosition(t);
             var rot = bAnim.InterpRotation(t);
             var sca = bAnim.InterpScale(t);
+
+            if (bone == proceduralBoneIndex)
+            {
+                rot = rot * proceduralLocalRotation;
+            }
 
             return p2w * Matrix4x4.TRS(pos, rot, sca);
         }

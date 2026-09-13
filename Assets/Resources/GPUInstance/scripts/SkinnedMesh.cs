@@ -161,9 +161,34 @@ namespace GPUInstance
             return this.skeleton.CalculateBone2World(mesh2world, bone, this._current_anim, this._anim_tick_start, this.mesh);
         }
 
+        public Matrix4x4 CalcBone2World(int bone, int proceduralBoneIndex, Quaternion proceduralLocalRotation)
+        {
+            Matrix4x4 mesh2world = Matrix4x4.TRS(mesh.position, mesh.rotation, mesh.scale);
+            return this.skeleton.CalculateBone2World(
+                mesh2world,
+                bone,
+                this._current_anim,
+                this._anim_tick_start,
+                this.mesh,
+                proceduralBoneIndex,
+                proceduralLocalRotation);
+        }
+
         public void BoneWorldTRS(int bone, out Vector3 position, out Quaternion rotation, out Vector3 scale)
         {
             var b2w = CalcBone2World(bone);
+            decompose(b2w, out position, out rotation, out scale);
+        }
+
+        public void BoneWorldTRS(
+            int bone,
+            int proceduralBoneIndex,
+            Quaternion proceduralLocalRotation,
+            out Vector3 position,
+            out Quaternion rotation,
+            out Vector3 scale)
+        {
+            var b2w = CalcBone2World(bone, proceduralBoneIndex, proceduralLocalRotation);
             decompose(b2w, out position, out rotation, out scale);
         }
 
